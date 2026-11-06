@@ -1,11 +1,8 @@
-*.class
-*.jar
+build/
+.gradle/
 out/
 bin/
-target/
 .idea/
 *.iml
 .vscode/
-.settings/
-.classpath
-.project
+*.class

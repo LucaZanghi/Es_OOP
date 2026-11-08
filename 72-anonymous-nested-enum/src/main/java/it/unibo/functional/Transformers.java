@@ -39,15 +39,24 @@ public final class Transformers {
      * @return A "flattened" list of the produced elements
      */
     public static <I, O> List<O> flattenTransform(
-        final Iterable<? extends I> base,
-        final Function<I, ? extends Collection<? extends O>> transformer
+        final Iterable<? extends I> base, //elementi con cui puo operare
+        final Function<I, ? extends Collection<? extends O>> transformer 
+        //la classe funzione va applicata ad ogni elemento possibilmente vuoto in una collezione di altri elementi 
+
     ) {
-        final var result = new ArrayList<O>();
+        final var result = new ArrayList<O>();//Creiamo una arraylist con elementi di tipo O(Output)
         for (final I input : Objects.requireNonNull(base, "The base iterable cannot be null")) {
             result.addAll(transformer.call(input));
         }
         return result;
     }
+    /*
+    Prima di entrare nel ciclo si controlla che base non sia null.
+    Poi, ad ogni giro, input diventa il prossimo elemento di base.
+    Su quell’elemento si fa transformer.call(input), che restituisce un gruppo di risultati.
+    Quel gruppo viene aggiunto a result, che quindi cresce giro dopo giro.
+    Quando base è finito, il ciclo si ferma da solo e si fa return result.
+    */
 
     /**
      * A function that applies a transformation to each element of an {@link Iterable},
@@ -65,11 +74,20 @@ public final class Transformers {
      * @return A transformed list where each input element is replaced with the produced elements
      */
     public static <I, O> List<O> transform(final Iterable<I> base, final Function<I, O> transformer) {
-        return null;
+        O element;
+        final var list = new ArrayList<O>();
+        for(final I input : base){
+            element = transformer.call(input);
+            list.add(element);
+        }
+        //scorrere iterable 
+        //apllicare il metodo per ogni elemltno 
+
+        return list;
     }
 
     /**
-     * A function that takes an iterable of collections, and returns a flatten list of the elements of the inner
+     * A function that takes an iterable of collections, and returns a flatten list of the elements of the inner(interne)
      * collections.
      * For instance, {@code [[1], [2, 3], [4, 5], []]} could use {@code flatten} to produce a flat list, thus obtaining
      * {@code [1, 2, 3, 4, 5]}.
@@ -81,7 +99,11 @@ public final class Transformers {
      * @return A flattened list with the elements of each collection in the input
      */
     public static <I> List<? extends I> flatten(final Iterable<? extends Collection<? extends I>> base) {
-        return null;
+        
+        return flattenTransform(base,pippo->pippo);//deve fare il return di una list di I di una sua sottoclasse
+        //con questa labda diciamo che l'input deve rimanere uguale al'output di conseguenza il metodo deducera che <I>=<O> e quindi fara un return
+        //del tipo che abbiamo dato in ingresso , ma anche se non lo avesse fatto e avess fatto return di List<O> sarebbe andato bene ugualmente
+        //perche sarebbe stato comunque un <extend I> perche deriva da I.
     }
 
     /**
@@ -98,8 +120,18 @@ public final class Transformers {
      * @return A list containing only the elements that passed the test
      */
     public static <I> List<I> select(final Iterable<I> base, final Function<I, Boolean> test) {
-        return null;
+        final var list = new ArrayList<I>();
+        for(final I input:base){
+            if(test.call(input)){
+                list.add(input);
+            }
+        }
+
+        return list;
     }
+    //Oppure se è obbligatorio l'utilizzo di flattenTransform sarebbe:
+    //return flattenTransform(base,x->test.call(x)?list.of(x):listof());
+    //Spiegazione return metodo(iterable , function if valoreseVero:valoreseFalso);
 
     /**
      * A function that applies a test to each element of an {@link Iterable}, returning a list containing only the
@@ -114,6 +146,7 @@ public final class Transformers {
      * @return A list containing only the elements that passed the test
      */
     public static <I> List<I> reject(final Iterable<I> base, final Function<I, Boolean> test) {
-        return null;
+        //dobbiamo togliere i numeri dispari tenendo quelli pari usando il metodo select
+        return select(base,x->!test.call(x));//Bisogna tenere le x che non passano il test(not test)
     }
 }

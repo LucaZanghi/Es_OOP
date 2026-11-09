@@ -26,8 +26,10 @@ public interface MonthSorter {
 
     /**
      * Provides a comparator that sorts months by number of days.
+     * Ordina i mesi in base al numero dei giorni 
      *
      * @return a comparator that sorts the Strings based on the number of days.
+     * Restituisce un comparetor che ordina le stringe in base al numero di giorni 
      */
     Comparator<String> sortByDays();
 

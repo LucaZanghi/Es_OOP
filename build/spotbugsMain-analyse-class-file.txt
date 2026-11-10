@@ -1,2 +1,0 @@
-C:\Users\zangh\Desktop\Java_Shit\Java_Git\lab08\81-simple-gui\build\classes\java\main\it\unibo\mvc\MiniGUI$1.class
-C:\Users\zangh\Desktop\Java_Shit\Java_Git\lab08\81-simple-gui\build\classes\java\main\it\unibo\mvc\MiniGUI.class

@@ -6,3 +6,4 @@ bin/
 *.iml
 .vscode/
 *.class
+!81-simple-gui/

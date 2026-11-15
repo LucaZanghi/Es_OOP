@@ -2,6 +2,7 @@ package it.unibo.deathnote;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -38,7 +39,7 @@ class TestDeathNote {
     @Test
     public void testRule1(){
     
-        for(int i=1;i<=note.RULES.size();i++){
+        for(int i=1;i<=DeathNote.RULES.size();i++){
             assertNotNull(note.getRule(i));
             assertFalse(note.getRule(i).isBlank());
         }
@@ -99,32 +100,31 @@ class TestDeathNote {
 
     @Test
     public void testRule4(){//I test sono void perché non devono fare return di nessun tipo di dato
-        /*
-        Dopo aver scritto la causa della morte, i dettagli della morte dovrebbero essere scritti nei successivi 6 secondi e 40 millisecondi dalla scrittura della causa della morte.
-        controlla che scrivere i dettagli della morte prima di scrivere un nome generi l'eccezione corretta
-        scrivi il nome di un essere umano sul quaderno
-        verificare che i dettagli della morte siano attualmente vuoti
-        imposta i dettagli della morte su "è durato troppo a lungo"
-        verificare che i dettagli della morte siano stati impostati correttamente (restituito vero e che i dettagli siano effettivamente "gestiti per troppo tempo")
-        scrivi il nome di un altro essere umano sul quaderno
-        dormire per 6100 ms
-        prova a cambiare i dettagli
-        verificare che i dettagli non siano stati modificati
-        */
-
+       
+        //Dopo aver scritto la causa della morte, i dettagli della morte dovrebbero essere scritti nei successivi 6 secondi e 40 millisecondi dalla scrittura della causa della morte.
+        //controlla che scrivere i dettagli della morte prima di scrivere un nome generi l'eccezione corretta
         String nome = "Sabita";
-        note.writeDeathCause("zap");
-        assertThrows(IllegalStateException.class, ()->note.writeDetails("in the park"));
+        assertThrows(IllegalStateException.class,()->note.writeDeathCause("zap"));
+        //scrivi il nome di un essere umano sul quaderno
         note.writeName(nome);
+        //verificare che i dettagli della morte siano attualmente vuoti
         assertEquals("",note.getDeathDetails(nome));
+        //imposta i dettagli della morte su "è durato troppo a lungo"
         note.writeDetails("ran for too long");
-        assertEquals(note.getDeathDetails(nome),"ran for too long");
+        //verificare che i dettagli della morte siano stati impostati correttamente (restituito vero e che i dettagli siano effettivamente "gestiti per troppo tempo")
+        assertEquals("ran for too long",note.getDeathDetails(nome));
+        //scrivi il nome di un altro essere umano sul quaderno
         note.writeName("FrancescoS");
+        //dormire per 6100 ms
         try{
-            note.wait(6100);
-        }catch(InterruptedException e){}
+            sleep(6100);//Normalmente quando lanciamo sleep parte un exception
+        }catch(InterruptedException e){//noi la prendiamo
+            Thread.currentThread().interrupt();//e gli dicamo qualcuno ha chiesto a questo trhead di fermarsi e la richiesta è ancora valida
+        }
+        //prova a cambiare i dettagli
         note.writeDetails("in a Flight");
-        assertEquals("in a Flight", note.writeDetails("in a Flight"));
+        //verificare che i dettagli non siano stati modificati
+        assertNotEquals("in a Flight", note.getDeathDetails("FrancescoS"));
 
     }
 }   

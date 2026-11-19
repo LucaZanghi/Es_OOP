@@ -6,4 +6,6 @@ package it.unibo.mvc;
  */
 public final class SimpleGUI {
 
+    
+    
 }

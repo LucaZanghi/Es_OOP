@@ -58,10 +58,11 @@ public class DeathNoteImpl implements DeathNote {
         if(last_name==null){//Se l'ultimo nome e vuoto--> exception
             throw new IllegalStateException(" there is no name written in this DeathNote,the cause is null");
         }
-
-        Death d = deathList.get(last_name);//Aggiugiamo il nome
-        d.writeCause(cause);//Chiamiamo il metodo in cause 
-        return true;
+        //Non funzionava il test perche in pratica creavamo una nuova death
+        Death old = deathList.get(last_name);//Aggiugiamo il nome
+        Death updateCause = old.writeCause(cause);//Aggiungiamo a old la causa
+        deathList.put(last_name, updateCause);//Con put non creiamo una nuova casella ma inseriamo il valore dove la chiave e lastname
+        return updateCause!=old;//Controllera il contenuno a cui le propie chiavi puntano 
     }
 
     /**
@@ -80,13 +81,13 @@ public class DeathNoteImpl implements DeathNote {
             last_name = chiave;
         }
 
-        if(last_name==null||details==null)
-        {
+        if(last_name==null||details==null){
             throw new IllegalStateException(" there is no name written in this DeathNote,or the details are null");
         }
-        Death d = deathList.get(last_name);
-        d.writeDetails(details);
-        return true;
+        Death old = deathList.get(last_name);
+        Death update = old.writeDetails(details);
+        deathList.put(last_name,update);//Aggiorniamo il campo trovandolo attraverso la chiave, rimpiazando la morte precendete con quella nuova
+        return update!=old;
     }
 
     /**

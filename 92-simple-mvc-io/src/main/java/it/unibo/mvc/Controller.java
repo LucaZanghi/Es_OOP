@@ -1,50 +1,47 @@
 package it.unibo.mvc;
 
-<<<<<<< HEAD
-=======
 import java.io.File;
 import java.io.IOException;
->>>>>>> dc556d4ddce6854745be04597b4f7275b659e369
+import java.io.PrintStream;
 
 /**
  * Application controller. Performs the I/O.
  */
 public class Controller {
-<<<<<<< HEAD
+    private static final String FILENAME = "output.txt";
+    private final String pathUser = System.getProperty("user.home");
+    private File FILEBASE; // Dobbiamo cambairlo quindi non possiamo metterlo final
 
-=======
-    private static final String FILE_DEFAULT_NAME ="output.txt"; 
-    private final String path_user = System.getProperty("user.home");
-    private final String path_separator = System.getProperty("file.separator");
-    private File FILE_DEFAULT;//Dobbiamo cambairlo quindi non possiamo metterlo final
+    // Builder
+    public Controller() {
+        this.FILEBASE = new File(pathUser, FILENAME);
+    }
 
-    //Builder
-    public Controller(){
-        this.FILE_DEFAULT =new File(path_user,FILE_DEFAULT_NAME);
+    // Metodo1
+    public void setfile(File file) {
+        // Dobbiamo settare il file corrente
+        this.FILEBASE = file;
     }
-    //Metodo1
-    public void setfile(File file){
-        //Dobbiamo settare il file corrente
-        this.FILE_DEFAULT =file;
+
+    // Metodo2
+    public File getfile() {
+        return this.FILEBASE;
     }
-    //Metodo2
-    public File getfile(){
-        return this.FILE_DEFAULT;
-    }
-    //Metodo3
-    public String getpath(File file){
-        String path = this.FILE_DEFAULT.getAbsolutePath();
+
+    // Metodo3
+    public String getpath(File file) {
+        final String path = this.FILEBASE.getAbsolutePath();
         return path;
     }
-    //Metodo4
-    public void savestring(String string){
-        //Deve salvare la stringa nel file corrente
-        /*if(string ==null){
-            throw  IOException();
-        }*/
-        File newpath = new File(string);//Creiamo un nuovo file con il path in questione
-        this.FILE_DEFAULT=newpath;//E lo associamo a quell del nostro oggetto
+
+    // Metodo4
+    public void save(final String text) throws IOException {    //Se il metodo fallisce lancia gia la IOException
+        // Deve salvare la stringa nel file corrente
+        try(PrintStream out = new PrintStream(FILEBASE)){//try gestisce il caso che potrebbe lanciare la exception
+                                                         //PrintStream e' un oggetto con il quale e possibile scrivere sui file 
+
+            out.print(text);//Stampa il testo nel file
+        }
     }
-    
->>>>>>> dc556d4ddce6854745be04597b4f7275b659e369
+
 }
